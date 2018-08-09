@@ -1,0 +1,10 @@
+syntax="proto2";
+package peleus.modules.configure;
+
+message plugin_conf {
+    required string func = 1;
+    required string path = 2;
+    required string conf_path = 3;
+    required int32 static_flag = 4;
+    optional int32 error_report = 5 [default = 0];
+}

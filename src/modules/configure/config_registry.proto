@@ -1,0 +1,11 @@
+syntax="proto2";
+package peleus.modules.configure;
+
+message module_conf {
+    required string name = 1;
+    required string path = 2;
+}
+
+message config_registry_conf {
+    repeated module_conf modules_conf = 1;
+}

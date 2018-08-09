@@ -1,0 +1,21 @@
+syntax="proto2";
+
+package peleus.plugins.configure;
+
+message mysql_connection {
+    required string host = 1;
+    required int32 port = 2;
+    required string user = 3;
+    required string password = 4;
+    required string dbname = 5;
+    optional uint32 read_timeout = 6 [default = 0];
+    optional uint32 conn_timeout = 7 [default = 0];
+    optional string character_set = 8 [default = "utf8"];
+};
+
+message mysql_connection_pool {
+    required string name = 1;
+    required int32 size = 2;
+    required mysql_connection conn_info = 3;
+};
+

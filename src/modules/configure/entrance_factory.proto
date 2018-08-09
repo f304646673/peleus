@@ -1,0 +1,7 @@
+syntax="proto2";
+package peleus.modules.configure;
+
+message entrance_conf {
+    required string name = 1;
+    required string path = 2;
+}

@@ -1,0 +1,14 @@
+syntax="proto2";
+
+package peleus.plugins.configure;
+
+message redis_conn_conf {
+    required string name = 1;
+    required string bns_or_ipport = 2;
+    optional string load_balancer_name = 3 [default = "la"];
+    optional string connect_type = 4 [default = "pooled"];
+    optional int32 timeout_ms = 5 [default = 150];
+    optional int32 max_retry = 6 [default = 3];
+    optional int32 backup_request_ms = 7 [default = 150];
+};
+

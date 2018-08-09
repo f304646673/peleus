@@ -1,0 +1,20 @@
+syntax="proto2";
+package peleus.modules.configure;
+
+message query_inter_server_conf {
+    required string server = 1;
+    required string connection_type = 2;
+    required int32 connect_timeout_ms = 3;
+    required int32 timeout_ms = 4;
+    required int32 max_retry = 5;
+    required string balancer = 6;
+}
+
+message inter_server_conf {
+    required int32 idle_timeout_sec = 1;
+    required int32 max_concurrency  = 2;
+    required int32 port = 3;
+    required string inter_servers_conf_path = 4;
+    required query_inter_server_conf query_conf = 5;
+}
+

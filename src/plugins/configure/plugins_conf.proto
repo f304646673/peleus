@@ -1,0 +1,14 @@
+syntax="proto2";
+
+package peleus.plugins.configure;
+
+message plugin_conf {
+    required string name = 1;
+    required string conf_path = 2;
+    optional bool on = 3 [default = true];
+};
+
+message plugins_conf {
+    repeated plugin_conf conf = 1;
+};
+

@@ -1,0 +1,18 @@
+syntax="proto2";
+package peleus.modules.configure;
+
+enum mc_pack_type {
+    FORMAT_COMPACK = 0;
+    FORMAT_MCPACK_V2 = 1;
+    FORMAT_NONE = 2;
+}
+
+message server_conf {
+    required string main_server_conf_path = 1;
+    required int32 idle_timeout_sec = 2;
+    required int32 max_concurrency  = 3;
+    required int32 internal_port = 4;
+    required int32 port = 5;
+    required int32 num_threads = 6;
+    optional mc_pack_type mcpack_type = 7 [default = FORMAT_NONE];
+}

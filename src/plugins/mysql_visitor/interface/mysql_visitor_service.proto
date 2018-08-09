@@ -1,0 +1,22 @@
+syntax="proto2";
+option cc_generic_services = true;
+
+package peleus.plugins;
+
+message MysqlVisitorServiceRequest {
+    required string conn_name = 1;
+    required string command = 2;
+};
+
+message MysqlVisitorRow {
+    repeated string column = 1;
+};
+
+message MysqlVisitorServiceResponse {
+    required bool suc = 1;
+    repeated MysqlVisitorRow rows = 2;
+};
+
+service MysqlVisitorService {
+    rpc query(MysqlVisitorServiceRequest) returns (MysqlVisitorServiceResponse);
+};

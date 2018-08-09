@@ -1,0 +1,33 @@
+syntax="proto2";
+option cc_generic_services = true;
+
+package peleus.plugins;
+
+message RedisVisitorServiceRequest {
+    required string conn_name = 1;
+    required string command = 2;
+};
+
+message RedisVisitorReply {
+    enum ReplyType {
+        NIL = 0;
+        INTEGER = 1;
+        ERROR = 2;
+        STRING = 3;
+        ARRAY = 4;
+    };
+    required ReplyType type = 1;
+    optional int64 integer = 2 [default = 0];
+    optional string error_message  = 3 [default = ""];
+    optional string c_str = 4 [default = ""];
+    repeated RedisVisitorReply replies = 5;
+};
+
+message RedisVisitorServiceResponse {
+    required bool suc = 1;
+    required RedisVisitorReply reply = 2;
+};
+
+service RedisVisitorService {
+    rpc query(RedisVisitorServiceRequest) returns (RedisVisitorServiceResponse);
+};
