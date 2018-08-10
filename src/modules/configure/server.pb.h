@@ -29,7 +29,6 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
-#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 #define PROTOBUF_INTERNAL_EXPORT_protobuf_src_2fmodules_2fconfigure_2fserver_2eproto 
@@ -64,26 +63,6 @@ namespace peleus {
 namespace modules {
 namespace configure {
 
-enum mc_pack_type {
-  FORMAT_COMPACK = 0,
-  FORMAT_MCPACK_V2 = 1,
-  FORMAT_NONE = 2
-};
-bool mc_pack_type_IsValid(int value);
-const mc_pack_type mc_pack_type_MIN = FORMAT_COMPACK;
-const mc_pack_type mc_pack_type_MAX = FORMAT_NONE;
-const int mc_pack_type_ARRAYSIZE = mc_pack_type_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* mc_pack_type_descriptor();
-inline const ::std::string& mc_pack_type_Name(mc_pack_type value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    mc_pack_type_descriptor(), value);
-}
-inline bool mc_pack_type_Parse(
-    const ::std::string& name, mc_pack_type* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<mc_pack_type>(
-    mc_pack_type_descriptor(), name, value);
-}
 // ===================================================================
 
 class server_conf : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:peleus.modules.configure.server_conf) */ {
@@ -230,13 +209,6 @@ class server_conf : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::google::protobuf::int32 num_threads() const;
   void set_num_threads(::google::protobuf::int32 value);
 
-  // optional .peleus.modules.configure.mc_pack_type mcpack_type = 7 [default = FORMAT_NONE];
-  bool has_mcpack_type() const;
-  void clear_mcpack_type();
-  static const int kMcpackTypeFieldNumber = 7;
-  ::peleus::modules::configure::mc_pack_type mcpack_type() const;
-  void set_mcpack_type(::peleus::modules::configure::mc_pack_type value);
-
   // @@protoc_insertion_point(class_scope:peleus.modules.configure.server_conf)
  private:
   void set_has_main_server_conf_path();
@@ -251,8 +223,6 @@ class server_conf : public ::google::protobuf::Message /* @@protoc_insertion_poi
   void clear_has_port();
   void set_has_num_threads();
   void clear_has_num_threads();
-  void set_has_mcpack_type();
-  void clear_has_mcpack_type();
 
   // helper for ByteSizeLong()
   size_t RequiredFieldsByteSizeFallback() const;
@@ -266,7 +236,6 @@ class server_conf : public ::google::protobuf::Message /* @@protoc_insertion_poi
   ::google::protobuf::int32 internal_port_;
   ::google::protobuf::int32 port_;
   ::google::protobuf::int32 num_threads_;
-  int mcpack_type_;
   friend struct ::protobuf_src_2fmodules_2fconfigure_2fserver_2eproto::TableStruct;
 };
 // ===================================================================
@@ -466,31 +435,6 @@ inline void server_conf::set_num_threads(::google::protobuf::int32 value) {
   // @@protoc_insertion_point(field_set:peleus.modules.configure.server_conf.num_threads)
 }
 
-// optional .peleus.modules.configure.mc_pack_type mcpack_type = 7 [default = FORMAT_NONE];
-inline bool server_conf::has_mcpack_type() const {
-  return (_has_bits_[0] & 0x00000040u) != 0;
-}
-inline void server_conf::set_has_mcpack_type() {
-  _has_bits_[0] |= 0x00000040u;
-}
-inline void server_conf::clear_has_mcpack_type() {
-  _has_bits_[0] &= ~0x00000040u;
-}
-inline void server_conf::clear_mcpack_type() {
-  mcpack_type_ = 2;
-  clear_has_mcpack_type();
-}
-inline ::peleus::modules::configure::mc_pack_type server_conf::mcpack_type() const {
-  // @@protoc_insertion_point(field_get:peleus.modules.configure.server_conf.mcpack_type)
-  return static_cast< ::peleus::modules::configure::mc_pack_type >(mcpack_type_);
-}
-inline void server_conf::set_mcpack_type(::peleus::modules::configure::mc_pack_type value) {
-  assert(::peleus::modules::configure::mc_pack_type_IsValid(value));
-  set_has_mcpack_type();
-  mcpack_type_ = value;
-  // @@protoc_insertion_point(field_set:peleus.modules.configure.server_conf.mcpack_type)
-}
-
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
@@ -500,18 +444,6 @@ inline void server_conf::set_mcpack_type(::peleus::modules::configure::mc_pack_t
 }  // namespace configure
 }  // namespace modules
 }  // namespace peleus
-
-namespace google {
-namespace protobuf {
-
-template <> struct is_proto_enum< ::peleus::modules::configure::mc_pack_type> : ::std::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::peleus::modules::configure::mc_pack_type>() {
-  return ::peleus::modules::configure::mc_pack_type_descriptor();
-}
-
-}  // namespace protobuf
-}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

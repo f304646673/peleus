@@ -19,7 +19,6 @@ namespace peleus {
 namespace modules {
 
 using google::protobuf::Service;
-using brpc::NsheadService;
 
 using peleus::utils::err_str;
 using peleus::utils::PeleusException;
@@ -30,7 +29,6 @@ using peleus::modules::configure::entrance_conf;
 
 using peleus::utils::TraversalFloder;
 using peleus::utils::TraversalCallback;
-using peleus::modules::configure::mc_pack_type;
 
 Server::Server(void) {
 }
