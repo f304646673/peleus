@@ -6,7 +6,7 @@
  ************************************************************************/
 #include "main_server.h"
 #include <brpc/server.h>
-#include "entrance/semi_sync_rpc.h"
+#include "src/entrance/semi_sync_rpc.h"
 #include "src/plugins/redis_visitor/interface/redis_visitor_service.pb.h"
 #include "src/plugins/mysql_visitor/interface/mysql_visitor_service.pb.h"
 
@@ -44,7 +44,7 @@ void MainServer::Echo(
     RedisVisitorServiceRequest redis_request;
     RedisVisitorServiceResponse redis_response;
     redis_request.set_command("get test_redis_key");
-    redis_request.set_conn_name("ksarch_offline_redis");
+    redis_request.set_conn_name("redis_server_address");
 
     MysqlVisitorServiceRequest mysql_request;
     MysqlVisitorServiceResponse mysql_response;

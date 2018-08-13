@@ -127,24 +127,18 @@ void InterServer::init_channel() {
     options.connect_timeout_ms = conf.connect_timeout_ms();
     options.timeout_ms = conf.timeout_ms();
     options.max_retry = conf.max_retry();
+
     std::string server_lower = conf.server();
     transform(server_lower.begin(), server_lower.end(), server_lower.begin(), ::toupper);
-    if (boost::istarts_with(server_lower, "bns://")) {
-        if (_channel.Init(conf.server().c_str(), conf.balancer().c_str(), &options)) {
-            FALSE_THROW(0, "%s fail to initialize channel %s", name(), conf.server().c_str());
-        }
-    }
-    else {
-        std::stringstream ss;
-        ss << _config.port();
-        std::string port = ss.str();
-        std::string server_port = conf.server();
-        server_port += ":";
-        server_port += port;
-        if (_channel.Init(server_port.c_str(), &options) != 0) {
-            FALSE_THROW(0, "%s fail to initialize channel %s", name(), server_port.c_str());
-        }
-    }
+	std::stringstream ss;
+	ss << _config.port();
+	std::string port = ss.str();
+	std::string server_port = conf.server();
+	server_port += ":";
+	server_port += port;
+	if (_channel.Init(server_port.c_str(), &options) != 0) {
+		FALSE_THROW(0, "%s fail to initialize channel %s", name(), server_port.c_str());
+	}
 }
 
 }

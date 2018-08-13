@@ -7,7 +7,7 @@
 #ifndef PELEUS_SRC_DEMO_SERVER_MAIN_SERVER_H
 #define PELEUS_SRC_DEMO_SERVER_MAIN_SERVER_H
 #include "src/demo/proto/demo.pb.h"
-#include "entrance/entrance.h"
+#include "src/entrance/entrance.h"
 
 namespace peleus {
 namespace demo {
@@ -18,10 +18,10 @@ class MainServer :
     public peleus::entrance::Entrance
 {
 public:
-    explicit MainServer(const char* name);
+	explicit MainServer(const char* name);
 
 public:
-  virtual void Echo(::google::protobuf::RpcController* controller,
+	virtual void Echo(::google::protobuf::RpcController* controller,
                        const ::demo::EchoRequest* request,
                        ::demo::EchoResponse* response,
                        ::google::protobuf::Closure* done) override;

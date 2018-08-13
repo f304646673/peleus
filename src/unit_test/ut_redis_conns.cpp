@@ -35,7 +35,7 @@ TEST_F(UtRedisConns, Set) {
     ss << "Set " << _key << " " << _value;
     std::string command = ss.str();
 
-    std::string conn_name = "ksarch_offline_redis";
+    std::string conn_name = "redis_server_address";
     brpc::RedisReply reply;
     bool result_set = RedisConns::get_mutable_instance().access(conn_name, command, reply);
     ASSERT_TRUE(result_set);
@@ -48,7 +48,7 @@ TEST_F(UtRedisConns, Get) {
     ss << "Get " << _key;
     std::string command = ss.str();
 
-    std::string conn_name = "ksarch_offline_redis";
+    std::string conn_name = "redis_server_address";
     brpc::RedisReply reply;
     bool result_set = RedisConns::get_mutable_instance().access(conn_name, command, reply);
     ASSERT_TRUE(result_set);

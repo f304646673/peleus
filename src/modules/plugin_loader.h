@@ -16,27 +16,27 @@
 namespace peleus {
 namespace modules {
 
-    class PluginLoader : 
-        public Module<PluginLoader>,
-        public boost::serialization::singleton<PluginLoader>
-    {
-        friend class Module<PluginLoader>;
-    public:
-        PluginLoader(void);
-        ~PluginLoader(void);
+class PluginLoader : 
+	public Module<PluginLoader>,
+	public boost::serialization::singleton<PluginLoader>
+{
+	friend class Module<PluginLoader>;
+public:
+	PluginLoader(void);
+	~PluginLoader(void);
 
-    public:
-        void load_plugin(const char* so_path, int static_flag, 
-                const char* fun_name, const char* conf_path, int error_report);
-        void load_plugin_and_run(
-                 const char* so_path, int static_flag, 
-                 const char* fun_name, const char* conf_path);
-    private:
-        void init_from_file(const char* conf_path);
-    private:
-        virtual void on_init(const char*) override final;
-        virtual const char* name() override final;
-    };
+public:
+	void load_plugin(const char* so_path, int static_flag, 
+		const char* fun_name, const char* conf_path, int error_report);
+	void load_plugin_and_run(
+		 const char* so_path, int static_flag, 
+		 const char* fun_name, const char* conf_path);
+private:
+	void init_from_file(const char* conf_path);
+private:
+	virtual void on_init(const char*) override final;
+	virtual const char* name() override final;
+};
 
 }
 }

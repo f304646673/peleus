@@ -73,19 +73,13 @@ private:
         options.backup_request_ms = conf.backup_request_ms();
         
         int init_ret = 0;
-        const std::string& bns_or_ipport = conf.bns_or_ipport();
-        if (boost::istarts_with(bns_or_ipport, "bns://")) {
-            const std::string& load_balancer_name = conf.load_balancer_name();
-            init_ret = channel->Init(bns_or_ipport.c_str(), load_balancer_name.c_str(), &options);
-        }
-        else {
-            init_ret = channel->Init(bns_or_ipport.c_str(), &options);
-        }
+        const std::string& ip_port = conf.ip_port();
+        init_ret = channel->Init(ip_port.c_str(), &options);
 
         if (init_ret) {
             delete channel;
             channel = NULL;
-            LOG(ERROR) << "init channel error:" << bns_or_ipport;
+            LOG(ERROR) << "init channel error:" << ip_port;
         }
 
         return channel;

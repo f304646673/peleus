@@ -7,7 +7,6 @@ message query_inter_server_conf {
     required int32 connect_timeout_ms = 3;
     required int32 timeout_ms = 4;
     required int32 max_retry = 5;
-    required string balancer = 6;
 }
 
 message inter_server_conf {
