@@ -114,11 +114,11 @@ DEMO_SERVER_LIBPATHS = $(LIBS)
 DEMO_SERVER_LIBPATHS += $(PELEUS_LIBS_OUTPUT)
 DEMO_SERVER_LIBPATHS_WITH_L = $(addprefix -L, $(DEMO_SERVER_LIBPATHS))
 
-DEMO_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_SERVER_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
+DEMO_SERVER_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_SERVER_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
 
 demo_server:$(DEMO_SERVER_PROTO_OBJS) $(DEMO_SERVER_SOURCES_OBJS)
 	test -d $(DEMO_SERVER_BIN_OUTPUT) || mkdir -p $(DEMO_SERVER_BIN_OUTPUT)
-	@$(CXX) $(DEMO_SERVER_LIBPATHS_WITH_L) $(DEMO_LINK_OPTIONS) $(DEMO_SERVER_LIBS) -o $(DEMO_SERVER_BIN_OUTPUT)/$@
+	@$(CXX) $(DEMO_SERVER_LIBPATHS_WITH_L) $(DEMO_SERVER_LINK_OPTIONS) $(DEMO_SERVER_LIBS) -o $(DEMO_SERVER_BIN_OUTPUT)/$@
 	test -d $(DEMO_SERVER_CONF_OUTPUT) || mkdir -p $(DEMO_SERVER_CONF_OUTPUT)
 	cp -r src/demo/server/conf/* $(DEMO_SERVER_CONF_OUTPUT)
 
@@ -139,72 +139,21 @@ DEMO_CLIENT_LIBS = $(BOOST_LINKINGS)
 DEMO_CLIENT_LIBPATHS = $(LIBS)
 DEMO_CLIENT_LIBPATHS_WITH_L = $(addprefix -L, $(DEMO_CLIENT_LIBPATHS))
 
-DEMO_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_CLIENT_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
+DEMO_CLIENT_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_CLIENT_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
 
 demo_client:$(DEMO_CLIENT_PROTO_OBJS) $(DEMO_CLIENT_SOURCES_OBJS)
 	test -d $(DEMO_CLIENT_BIN_OUTPUT) || mkdir -p $(DEMO_CLIENT_BIN_OUTPUT)
-	@$(CXX) $(DEMO_CLIENT_LIBPATHS_WITH_L) $(DEMO_LINK_OPTIONS) $(DEMO_CLIENT_LIBS) -o $(DEMO_CLIENT_BIN_OUTPUT)/$@
+	@$(CXX) $(DEMO_CLIENT_LIBPATHS_WITH_L) $(DEMO_CLIENT_LINK_OPTIONS) $(DEMO_CLIENT_LIBS) -o $(DEMO_CLIENT_BIN_OUTPUT)/$@
 	#test -d $(DEMO_CLIENT_CONF_OUTPUT) || mkdir -p $(DEMO_CLIENT_CONF_OUTPUT)
 	#cp -r src/demo/client/conf/* $(DEMO_SERVER_CONF_OUTPUT)
 
-
-
-#CLIENT_SOURCES = client.cpp
-#SERVER_SOURCES = server.cpp
-#PROTOS = $(wildcard *.proto)
-#
-#PROTO_OBJS = $(PROTOS:.proto=.pb.o)
-#PROTO_GENS = $(PROTOS:.proto=.pb.h) $(PROTOS:.proto=.pb.cc)
-#CLIENT_OBJS = $(addsuffix .o, $(basename $(CLIENT_SOURCES))) 
-#SERVER_OBJS = $(addsuffix .o, $(basename $(SERVER_SOURCES))) 
-#
-#ifeq ($(SYSTEM),Darwin)
-# ifneq ("$(LINK_SO)", "")
-#	STATIC_LINKINGS += -lbrpc
-# else
-#	# *.a must be explicitly specified in clang
-#	STATIC_LINKINGS += $(BRPC_PATH)/output/lib/libbrpc.a
-# endif
-#	LINK_OPTIONS_SO = $^ $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-#	LINK_OPTIONS = $^ $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-#else ifeq ($(SYSTEM),Linux)
-#	STATIC_LINKINGS += -lbrpc
-#	LINK_OPTIONS_SO = -Xlinker "-(" $^ -Xlinker "-)" $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-#	LINK_OPTIONS = -Xlinker "-(" $^ -Wl,-Bstatic $(STATIC_LINKINGS) -Wl,-Bdynamic -Xlinker "-)" $(DYNAMIC_LINKINGS)
-#endif
-#
 #.PHONY:all
-#all: echo_client echo_server
-#
-#.PHONY:clean
-#clean:
-#	@echo "Cleaning"
-#	@rm -rf echo_client echo_server $(PROTO_GENS) $(PROTO_OBJS) $(CLIENT_OBJS) $(SERVER_OBJS)
-#
-#echo_client:$(PROTO_OBJS) $(CLIENT_OBJS)
-#	@echo "Linking $@"
-#ifneq ("$(LINK_SO)", "")
-#	@$(CXX) $(LIBPATHS) $(SOPATHS) $(LINK_OPTIONS_SO) -o $@
-#else
-#	@$(CXX) $(LIBPATHS) $(LINK_OPTIONS) -o $@
-#endif
-#
-#echo_server:$(PROTO_OBJS) $(SERVER_OBJS)
-#	@echo "Linking $@"
-#ifneq ("$(LINK_SO)", "")
-#	@$(CXX) $(LIBPATHS) $(SOPATHS) $(LINK_OPTIONS_SO) -o $@
-#else
-#	@$(CXX) $(LIBPATHS) $(LINK_OPTIONS) -o $@
-#endif
-#
-
-#.PHONY:all
-all: peleus demo_server
+all: peleus demo_server demo_client
 
 #.PHONY:clean
 clean:
 	@echo "Cleaning"
-	@rm -rf $(PELEUS_PROTO_GENS) $(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS) $(OUTPUT)
+	@rm -rf $(PELEUS_PROTO_GENS) $(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS) $(DEMO_CLIENT_PROTO_OBJS) $(DEMO_CLIENT_SOURCES_OBJS) $(DEMO_SERVER_PROTO_OBJS) $(DEMO_SERVER_SOURCES_OBJS) $(OUTPUT)
 
 %.pb.cc %.pb.h:%.proto
 	@echo "Generating $@"
