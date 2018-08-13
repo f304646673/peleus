@@ -145,7 +145,7 @@ all: peleus
 #.PHONY:clean
 clean:
 	@echo "Cleaning"
-	@rm -rf $(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS) $(OUTPUT)
+	@rm -rf $(PELEUS_PROTO_GENS) $(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS) $(OUTPUT)
 
 %.pb.cc %.pb.h:%.proto
 	@echo "Generating $@"
