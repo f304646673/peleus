@@ -22,21 +22,6 @@ SOPATHS=$(addprefix -Wl$(COMMA)-rpath$(COMMA), $(LIBS))
 BOOST_LINKINGS = -lboost_system -lboost_filesystem -lboost_serialization
 MYSQL_LINKINGS = -lmysqlclient
 
-ifeq ($(SYSTEM),Darwin)
- ifneq ("$(LINK_SO)", "")
-	STATIC_LINKINGS += -lbrpc
- else
-	# *.a must be explicitly specified in clang
-	STATIC_LINKINGS += $(BRPC_PATH)/lib/libbrpc.a
- endif
-	LINK_OPTIONS_SO = $^ $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-	LINK_OPTIONS = $^ $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-else ifeq ($(SYSTEM),Linux)
-	STATIC_LINKINGS += -lbrpc
-	LINK_OPTIONS_SO = -Xlinker "-(" $^ -Xlinker "-)" $(STATIC_LINKINGS) $(DYNAMIC_LINKINGS)
-	LINK_OPTIONS = -Xlinker "-(" $^ -Wl,-Bstatic $(STATIC_LINKINGS) -Wl,-Bdynamic -Xlinker "-)" $(DYNAMIC_LINKINGS)
-endif
-
 ########################################################################################################
 #STL_SERIALIZATION_TEST
 STL_SERIALIZATION_TEST_LIBS = $(BOOST_LINKINGS)
@@ -56,10 +41,6 @@ stl_serialization_test:
 ########################################################################################################
 #PELEUS
 
-PELEUS_LIBS = $(STATIC_LINKINGS)
-PELEUS_LIBS += $(BOOST_LINKINGS)
-PELEUS_LIBS += -lgtest -lpthread
-
 PELEUS_INCLUDE_PATH = $(HDRPATHS)
 PELEUS_LIBS_PATH = $(LIBPATHS)
 PELEUS_SOURCES = $(wildcard src/entrance/*.cpp src/main/*.cpp src/modules/*.cpp src/utils/*.cpp src/plugins/*.cpp src/plugins/*/*.cpp)
@@ -75,10 +56,6 @@ PELEUS_LIBS_OUTPUT = $(PELEUS_OUTPUT)/libs
 
 PELEUS_OUT_HEADERS = $(wildcard src/entrance/*.h src/utils/*.h src/plugins/*/*.h)
 
-#		test -d $(PELEUS_ENTRANCE_INCLUDE_OUTPUT) || mkdir -p $(PELEUS_ENTRANCE_INCLUDE_OUTPUT);\
-#		cp $$path $(P_INCLUDE_OUTPUT);\
-#		HEAD_OUT_PATH = $(PELEUS_INCLUDE_OUTPUT)/path;\
-
 peleus:$(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS)
 	for path in $(PELEUS_OUT_HEADERS);do\
 		dir=$${path%/*};\
@@ -90,7 +67,6 @@ peleus:$(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS)
 		
 	test -d $(PELEUS_LIBS_OUTPUT) || mkdir -p $(PELEUS_LIBS_OUTPUT)
 	ar rcs $(PELEUS_LIBS_OUTPUT)/lib$@.a $(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS)
-#	echo $(CXX) $$obj_path $(PELEUS_INCLUDE_PATH) $(CXXFLAGS) $(PELEUS_LIBS_PATH) $(PELEUS_LIBS) -o $(PELEUS_OUTPUT)$@.a;\
 ########################################################################################################
 #DEMO
 
@@ -105,6 +81,7 @@ DEMO_SERVER_OUTPUT = $(OUTPUT)/demo/server
 DEMO_SERVER_BIN_OUTPUT = $(DEMO_SERVER_OUTPUT)/bin
 DEMO_SERVER_CONF_OUTPUT = $(DEMO_SERVER_OUTPUT)/conf
 DEMO_SERVER_LINKINGS = $(STATIC_LINKINGS)
+DEMO_SERVER_LINKINGS += -lbrpc
 DEMO_SERVER_LINKINGS += -lpeleus
 
 DEMO_SERVER_LIBS = $(BOOST_LINKINGS)
@@ -133,6 +110,7 @@ DEMO_CLIENT_OUTPUT = $(OUTPUT)/demo/client
 DEMO_CLIENT_BIN_OUTPUT = $(DEMO_CLIENT_OUTPUT)/bin
 DEMO_CLIENT_CONF_OUTPUT = $(DEMO_CLIENT_OUTPUT)/conf
 DEMO_CLIENT_LINKINGS = $(STATIC_LINKINGS)
+DEMO_CLIENT_LINKINGS += -lbrpc
 
 DEMO_CLIENT_LIBS = $(BOOST_LINKINGS)
 
