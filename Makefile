@@ -126,6 +126,7 @@ demo_client:$(DEMO_CLIENT_PROTO_OBJS) $(DEMO_CLIENT_SOURCES_OBJS)
 	#test -d $(DEMO_CLIENT_CONF_OUTPUT) || mkdir -p $(DEMO_CLIENT_CONF_OUTPUT)
 	#cp -r src/demo/client/conf/* $(DEMO_SERVER_CONF_OUTPUT)
 
+########################################################################################################
 #.PHONY:all
 all: peleus demo_server demo_client
 
