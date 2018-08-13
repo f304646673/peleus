@@ -17,8 +17,7 @@ OUTPUT=./output
 
 HDRPATHS=$(addprefix -I, $(HDRS))
 LIBPATHS=$(addprefix -L, $(LIBS))
-COMMA=,
-SOPATHS=$(addprefix -Wl$(COMMA)-rpath$(COMMA), $(LIBS))
+
 BOOST_LINKINGS = -lboost_system -lboost_filesystem -lboost_serialization
 MYSQL_LINKINGS = -lmysqlclient
 
@@ -80,18 +79,20 @@ DEMO_SERVER_PROTO_GENS = $(DEMO_SERVER_PROTOS:.proto=.pb.h) $(DEMO_SERVER_PROTOS
 DEMO_SERVER_OUTPUT = $(OUTPUT)/demo/server
 DEMO_SERVER_BIN_OUTPUT = $(DEMO_SERVER_OUTPUT)/bin
 DEMO_SERVER_CONF_OUTPUT = $(DEMO_SERVER_OUTPUT)/conf
+
 DEMO_SERVER_LINKINGS = $(STATIC_LINKINGS)
 DEMO_SERVER_LINKINGS += -lbrpc
 DEMO_SERVER_LINKINGS += -lpeleus
 
 DEMO_SERVER_LIBS = $(BOOST_LINKINGS)
 DEMO_SERVER_LIBS += $(MYSQL_LINKINGS)
+DEMO_SERVER_LIBS += $(DYNAMIC_LINKINGS)
 
 DEMO_SERVER_LIBPATHS = $(LIBS)
 DEMO_SERVER_LIBPATHS += $(PELEUS_LIBS_OUTPUT)
 DEMO_SERVER_LIBPATHS_WITH_L = $(addprefix -L, $(DEMO_SERVER_LIBPATHS))
 
-DEMO_SERVER_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_SERVER_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
+DEMO_SERVER_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_SERVER_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" 
 
 demo_server:$(DEMO_SERVER_PROTO_OBJS) $(DEMO_SERVER_SOURCES_OBJS)
 	test -d $(DEMO_SERVER_BIN_OUTPUT) || mkdir -p $(DEMO_SERVER_BIN_OUTPUT)
@@ -113,11 +114,12 @@ DEMO_CLIENT_LINKINGS = $(STATIC_LINKINGS)
 DEMO_CLIENT_LINKINGS += -lbrpc
 
 DEMO_CLIENT_LIBS = $(BOOST_LINKINGS)
+DEMO_CLIENT_LIBS += $(DYNAMIC_LINKINGS)
 
 DEMO_CLIENT_LIBPATHS = $(LIBS)
 DEMO_CLIENT_LIBPATHS_WITH_L = $(addprefix -L, $(DEMO_CLIENT_LIBPATHS))
 
-DEMO_CLIENT_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_CLIENT_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
+DEMO_CLIENT_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_CLIENT_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)"
 
 demo_client:$(DEMO_CLIENT_PROTO_OBJS) $(DEMO_CLIENT_SOURCES_OBJS)
 	test -d $(DEMO_CLIENT_BIN_OUTPUT) || mkdir -p $(DEMO_CLIENT_BIN_OUTPUT)
