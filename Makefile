@@ -93,6 +93,8 @@ peleus:$(PELEUS_PROTO_OBJS) $(PELEUS_SOURCES_OBJS)
 #	echo $(CXX) $$obj_path $(PELEUS_INCLUDE_PATH) $(CXXFLAGS) $(PELEUS_LIBS_PATH) $(PELEUS_LIBS) -o $(PELEUS_OUTPUT)$@.a;\
 ########################################################################################################
 #DEMO
+
+#SERVER
 DEMO_SERVER_SOURCES = $(wildcard src/demo/server/*.cpp)
 DEMO_SERVER_SOURCES_OBJS = $(addsuffix .o, $(basename $(DEMO_SERVER_SOURCES))) 
 DEMO_SERVER_PROTOS = $(wildcard src/demo/proto/*.proto)
@@ -119,6 +121,33 @@ demo_server:$(DEMO_SERVER_PROTO_OBJS) $(DEMO_SERVER_SOURCES_OBJS)
 	@$(CXX) $(DEMO_SERVER_LIBPATHS_WITH_L) $(DEMO_LINK_OPTIONS) $(DEMO_SERVER_LIBS) -o $(DEMO_SERVER_BIN_OUTPUT)/$@
 	test -d $(DEMO_SERVER_CONF_OUTPUT) || mkdir -p $(DEMO_SERVER_CONF_OUTPUT)
 	cp -r src/demo/server/conf/* $(DEMO_SERVER_CONF_OUTPUT)
+
+#CLIENT
+DEMO_CLIENT_SOURCES = $(wildcard src/demo/client/*.cpp)
+DEMO_CLIENT_SOURCES_OBJS = $(addsuffix .o, $(basename $(DEMO_CLIENT_SOURCES))) 
+DEMO_CLIENT_PROTOS = $(wildcard src/demo/proto/*.proto)
+DEMO_CLIENT_PROTO_OBJS = $(DEMO_CLIENT_PROTOS:.proto=.pb.o)
+DEMO_CLIENT_PROTO_GENS = $(DEMO_CLIENT_PROTOS:.proto=.pb.h) $(DEMO_CLIENT_PROTOS:.proto=.pb.cc)
+
+DEMO_CLIENT_OUTPUT = $(OUTPUT)/demo/client
+DEMO_CLIENT_BIN_OUTPUT = $(DEMO_CLIENT_OUTPUT)/bin
+DEMO_CLIENT_CONF_OUTPUT = $(DEMO_CLIENT_OUTPUT)/conf
+DEMO_CLIENT_LINKINGS = $(STATIC_LINKINGS)
+
+DEMO_CLIENT_LIBS = $(BOOST_LINKINGS)
+
+DEMO_CLIENT_LIBPATHS = $(LIBS)
+DEMO_CLIENT_LIBPATHS_WITH_L = $(addprefix -L, $(DEMO_CLIENT_LIBPATHS))
+
+DEMO_LINK_OPTIONS=-Xlinker "-(" $^ -Wl,-Bstatic,--whole-archive $(DEMO_CLIENT_LINKINGS) -Wl,-Bdynamic,--no-whole-archive -Xlinker "-)" $(DYNAMIC_LINKINGS)
+
+demo_client:$(DEMO_CLIENT_PROTO_OBJS) $(DEMO_CLIENT_SOURCES_OBJS)
+	test -d $(DEMO_CLIENT_BIN_OUTPUT) || mkdir -p $(DEMO_CLIENT_BIN_OUTPUT)
+	@$(CXX) $(DEMO_CLIENT_LIBPATHS_WITH_L) $(DEMO_LINK_OPTIONS) $(DEMO_CLIENT_LIBS) -o $(DEMO_CLIENT_BIN_OUTPUT)/$@
+	#test -d $(DEMO_CLIENT_CONF_OUTPUT) || mkdir -p $(DEMO_CLIENT_CONF_OUTPUT)
+	#cp -r src/demo/client/conf/* $(DEMO_SERVER_CONF_OUTPUT)
+
+
 
 #CLIENT_SOURCES = client.cpp
 #SERVER_SOURCES = server.cpp
