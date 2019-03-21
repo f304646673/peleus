@@ -78,6 +78,35 @@ private:
     std::vector<OnRPCDone*> _vec_done;
 };
 
+
+template<class TRES>
+static void OnRPCDone(baidu::rpc::Controller* cntl, TRES* response) {
+    std::unique_ptr<TRES> response_guard(response);
+    std::unique_ptr<baidu::rpc::Controller> cntl_guard(cntl);
+    if (cntl->Failed()) {
+    } else {
+    }
+}
+
+template<class TS, class TRES, class TM, class TREQ>
+void asyn_rpc_without_response(baidu::rpc::Channel* channel,
+        TM m, const TREQ* request, int timeout = -1)
+ {
+    TRES* new_response = new TRES();
+    if (!channel) {
+        baidu::rpc::Channel& ref_channel = get_inter_channel();
+        channel = &ref_channel;
+    }
+    TS stub(channel);
+    OnRPCDoneCb method = boost::bind(m, &stub, _1, request, new_response, _2);
+
+    baidu::rpc::Controller* cntl = new baidu::rpc::Controller();
+    auto func = OnRPCDone<TRES>;
+    google::protobuf::Closure* done = baidu::rpc::NewCallback(func, cntl, new_response);
+
+    method(cntl, done);
+}
+
 }
 }
 
